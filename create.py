@@ -4,13 +4,8 @@ import time
 import uuid
 import boto3
 import decimalencoder
-import overbook_exception
 
 dynamodb = boto3.resource('dynamodb')
-
-## Raises an error Exception when user has overbooked
-def overbook():
-    raise overbook_exception.OverBookException('Sorry! Hotel is overbooked.')
 
 ## Create a hotel booking if not overbooked
 def create(event, context):
@@ -71,6 +66,6 @@ def create(event, context):
             }
         }
     else:
-        return overbook()
+        print("Create succeeded:")
 
     return response

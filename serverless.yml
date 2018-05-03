@@ -25,21 +25,21 @@ functions:
     handler: create.create
     events:
       - http:
-          path: booking
+          path: date
           method: post
           cors: true
   list:
     handler: list.list
     events:
       - http:
-          path: booking
+          path: date
           method: get
           cors: true
   update:
     handler: update.update
     events:
       - http:
-          path: booking
+          path: date
           method: put
           cors: true
       
