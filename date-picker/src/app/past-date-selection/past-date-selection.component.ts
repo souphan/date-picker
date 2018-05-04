@@ -15,16 +15,19 @@ export class PastDateSelectionComponent implements OnInit {
 
   constructor(private database: DatabaseService, public router: Router) { }
 
+  // On component initialization get the dates from our API endpoint
   ngOnInit() {
-    this.getRestaurants();
+    this.getDates();
   }
 
-  public getRestaurants() {
+  // Get list of dates
+  public getDates() {
     this.database.getDates().subscribe( data => {
       this.dates = data; 
     });
   }
 
+  // Route back to calendar
   public goBack() {
     this.router.navigate(['']);
   }

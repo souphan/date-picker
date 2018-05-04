@@ -16,12 +16,12 @@ import { Router } from "@angular/router";
 
 export class DateSelectionComponent implements OnInit {
   private uuid = UUID.UUID();
-  public events: string[] = [];
 
   constructor(private database: DatabaseService, public router: Router) { }
 
   ngOnInit() {}
 
+  // Captures the selected date, and calls postDate() method to insert into database
   public addEvent(event: MatDatepickerInputEvent<Date>) {
     let item = {
       "date": event.value,
@@ -29,6 +29,7 @@ export class DateSelectionComponent implements OnInit {
     this.postDate(item);
   }
 
+  // Inserts date selected in database
   public postDate(item) {
     this.database.postDateSelection(item).subscribe(
       data => {
@@ -41,6 +42,7 @@ export class DateSelectionComponent implements OnInit {
     );
   }
 
+  // Navigates to past dates selected page
   public goPastDates() {
     this.router.navigate(['/past-date']);
   }
