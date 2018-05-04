@@ -1,0 +1,10 @@
+<div class="example-events">
+  <div *ngFor="let d of dates">{{d.selectedDate | date:'longDate'}}</div>
+</div>
+
+<div class="button">
+    <button class="submit-button" mat-button
+        (click)="goBack()">
+        Calendar
+    </button> 
+</div>
