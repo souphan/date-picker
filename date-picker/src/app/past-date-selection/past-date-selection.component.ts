@@ -11,7 +11,7 @@ import { Router } from "@angular/router";
   providers:[DatabaseService]
 })
 export class PastDateSelectionComponent implements OnInit {
-  private dates: DateListResponse;
+  public dates: DateListResponse;
 
   constructor(private database: DatabaseService, public router: Router) { }
 
