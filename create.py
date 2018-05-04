@@ -3,69 +3,36 @@ import os
 import time
 import uuid
 import boto3
-import decimalencoder
-
 dynamodb = boto3.resource('dynamodb')
 
-## Create a hotel booking if not overbooked
-def create(event, context):
-    ## Grab the event data given by the user
-    data = json.loads(event['body'])
 
-    ## Timestamp created for hotel booking insertss
-    timestamp = int(time.time() * 1000)
+def create(event, context):
+    data = json.loads(event['body'])
 
     ## Creating a table inside DynamoDB
     table = dynamodb.Table(os.environ['DYNAMODB_TABLE'])
 
-    ## Grab all data from the database
-    resultList = table.scan()
-    bookings_placed = []
+    timestamp = int(time.time() * 1000)
 
-    ## Loop through data dictionary and store data in variables
-    for li in resultList['Items']:
-        if 'email' in li:
-            bookings_placed.append(li['email'])
-        if 'numberOfRooms' in li:
-            booking_number_rooms = li['numberOfRooms']
-        if 'numberOverBooking' in li:
-            ## Get percent value of overbooking
-            booking_number_overbook =  (li['numberOverBooking'] * li['numberOfRooms']) / 100
+    ## Items to populate the table
+    item = {
+        'id': str(uuid.uuid1()),
+        'selectedDate': data['date'],
+        'createdAt': timestamp,
+        'updatedAt': timestamp
+    }
 
-    ## Get overbooking percent
-    over_booking_percent = booking_number_rooms * booking_number_overbook
-    ## Get overbooking amount the hotel is allowing
-    overbooking_amount = over_booking_percent + booking_number_rooms
+    # write the item to the database
+    table.put_item(Item=item)
 
-    ## Only allow booking to take place if the number of 
-    ## rooms booked is less than bookings placed plus overbooking amount
-    ## if over the limit, then throw error Exception
-    if len(bookings_placed) <= booking_number_rooms or len(bookings_placed) <= overbooking_amount:
-        ## Items to populate the table
-        item = {
-            'id': str(uuid.uuid1()),
-            'firstName': data['firstName'],
-            'lastName': data['lastName'],
-            'email': data['email'],
-            'arrival': data['arrival'],
-            'departure': data['departure'],
-            'createdAt': timestamp,
-            'updatedAt': timestamp
+    # create a response
+    response = {
+        "statusCode": 200,
+        "body": json.dumps(item),
+        "headers": {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Credentials": "true"
         }
-
-        # write the item to the database
-        table.put_item(Item=item)
-
-        # create a response
-        response = {
-            "statusCode": 200,
-            "body": json.dumps(item),
-            "headers": {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Credentials": "true"
-            }
-        }
-    else:
-        print("Create succeeded:")
+    }
 
     return response

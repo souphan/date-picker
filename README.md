@@ -11,3 +11,19 @@ These instructions will get you a copy of the project up and running on your loc
 This application uses Serverless and AWS DynamoDB for api calls, so we need to install Serverless and configure AWS credentials.
 
 ### Installing
+Change to directory `date-picker`:
+```
+cd date-picker
+```
+
+Install dependencies:
+```
+npm install
+```
+
+Run the app:
+```
+ng serve
+```
+
+Navigate on browser to `localhost:4200`.
